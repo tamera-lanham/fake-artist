@@ -1,6 +1,39 @@
 import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+//import Grid from '@material-ui/core/Grid'
+//import Typography from '@material-ui/core/Typography';
+//import Box from '@material-ui/core/Box';
 
-const ToDoForm = ({ addTask }) => {
+const useStyles = makeStyles({
+	card: {
+		width: 275,
+		margin: 5,
+		padding: 5
+	}
+});
+
+function PlayerCard({ player }) {
+
+	const classes = useStyles()
+
+	return (
+		<Card className={classes.card}>
+			<CardContent>
+				<Typography>Name: {player.name}</Typography>
+			</CardContent>
+		</Card >
+	);
+}
+
+function AddPlayerForm({ addPlayer }) {
+	const classes = useStyles()
+
 
 	const [userInput, setUserInput] = React.useState('');
 
@@ -10,47 +43,19 @@ const ToDoForm = ({ addTask }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		addTask(userInput);
+		addPlayer(userInput);
 		setUserInput("");
 	}
 	return (
-		<form onSubmit={handleSubmit}>
-			<input value={userInput} type="text" onChange={handleChange} placeholder="Enter task..." />
-			<button>Submit</button>
-		</form>
+		<Card className={classes.card}>
+			<form onSubmit={handleSubmit}>
+				<TextField value={userInput} onChange={handleChange} label="Name" variant="outlined" />
+				<Button onClick={handleSubmit}>Submit</Button>
+			</form>
+		</Card>
 	);
 };
 
-function Player({ player }) {
-	return (
-		<div className="player">
-			Player: {player.name}, color: {player.color}
-		</div >
-	);
-}
-
-function AddPlayerForm({ addPlayer }) {
-
-	const [formContents, setFormContents] = React.useState("");
-
-	const handleSubmit = e => {
-		e.preventDefault();
-		if (!formContents) return;
-		addPlayer(formContents);
-		setFormContents("");
-	};
-
-	return (
-		<form onSubmit={handleSubmit}>
-			<input
-				type="text"
-				className="input"
-				value={formContents}
-				onChange={e => setFormContents(e.target.value)}
-			/>
-		</form>
-	);
-}
 
 function Setup({ gameState, setGameState }) {
 
@@ -68,16 +73,16 @@ function Setup({ gameState, setGameState }) {
 	}
 	*/
 
-	/* Game setup params:
-	- Number of players
-	- Names of players
-	- Colors
-	- Number of fakers
-	- Category
-
-	Randomized:
+	/*Randomized:
 	- Faker indices
 	- Word
+	*/
+
+	/*
+	Material components:
+	- Cards for player list
+		- Either card expansion or modal for player editing
+	- Grid
 	*/
 
 	const [newGameState, setNewGameState] = React.useState(gameState)
@@ -85,18 +90,20 @@ function Setup({ gameState, setGameState }) {
 	function addPlayer(name) {
 		let newGameStateCopy = { ...newGameState }
 		newGameStateCopy.players = [...newGameStateCopy.players, { name: name, color: 'gray' }]
-		setNewGameState(newGameStateCopy)
-		setGameState(newGameStateCopy)
+		setNewGameState(newGameStateCopy) // This is essentially just to trigger the re-render of the Setup component
+		setGameState(newGameStateCopy) // This actually sets the game state for the App component
 	}
 
 	return (
-		<div>
-			<h2>Set up the game</h2>
-			{newGameState.players.map((player, index) => <Player index={index} key={index} player={player} />)}
+		<Container maxWidth="sm">
+			<div>
+				<h2>Set up the game</h2>
+				{newGameState.players.map((player, index) => <PlayerCard index={index} key={index} player={player} />)}
 
-			<ToDoForm addTask={addPlayer} />
+				<AddPlayerForm addPlayer={addPlayer} />
 
-		</div>
+			</div>
+		</Container>
 	);
 }
 
