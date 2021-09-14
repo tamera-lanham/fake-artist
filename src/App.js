@@ -11,11 +11,10 @@ import Setup from './components/Setup'
 export default function App() {
 
 	const [gameState, setGameState] = React.useState({
-		players: ['Patrick', 'Miranda', 'Michael', 'Tamera'],
-		colors: ['red', 'green', 'blue', 'yellow'],
-		fakerIndices: [3],
-		category: 'Cowboy gear',
-		word: 'Spurrs'
+		players: [],
+		fakerIndices: [],
+		category: '',
+		word: ''
 	})
 
 
@@ -38,7 +37,7 @@ export default function App() {
 						<Redirect to="/setup" />
 					</Route>
 					<Route path="/setup">
-						<Setup setGameState={setGameState} />
+						<Setup gameState={gameState} setGameState={setGameState} />
 					</Route>
 					<Route path="/play">
 						<Play gameState={gameState} />
@@ -55,7 +54,7 @@ function Play(props) {
 	return (
 		<div>
 			<h2>Here is the game state:</h2>
-			{props.gameState.players} <br />
+			{props.gameState.players.map(player => player.name)} <br />
 			{props.gameState.category} <br />
 			{props.gameState.word}
 		</div>
