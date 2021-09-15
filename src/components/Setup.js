@@ -6,17 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import NativeSelect from '@material-ui/core/NativeSelect';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import ExpandMoreIcon from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
-import CheckCircleIconRounded from '@material-ui/icons/CheckCircle';
 import gameWords from '../data/words.json'
 import { Link } from 'react-router-dom'
 
@@ -168,12 +164,12 @@ function OtherOptions({ gameState, setGameState }) {
 
 	function getCategoryAndWord(categoryChoice) {
 		let category, word, _
-		if (categoryChoice == 'Random') {
+		if (categoryChoice === 'Random') {
 			[category, word] = randomChoice(gameWords.list)
 		}
 		else {
 			category = categoryChoice;
-			[_, word] = randomChoice(gameWords.list.filter(([category, word]) => category == categoryChoice))
+			[_, word] = randomChoice(gameWords.list.filter(([category, word]) => category === categoryChoice))
 		}
 		return [category, word]
 	}
@@ -182,7 +178,7 @@ function OtherOptions({ gameState, setGameState }) {
 		const fakerIndices = []
 		const numPlayers = gameState.players.length
 
-		if (numFakers == 'Random') {
+		if (numFakers === 'Random') {
 			numFakers = Math.floor(Math.random() * numPlayers)
 		}
 		numFakers = Math.min(numFakers, numPlayers)
@@ -213,23 +209,23 @@ function OtherOptions({ gameState, setGameState }) {
 	return (
 		<div>
 			<div className={classes.gridContainer}>
-				<FormControl variant="outlined">
+				<FormControl variant="outlined" key={0}>
 					<InputLabel htmlFor="outlined-age-native-simple">Category</InputLabel>
 					<Select label="Category"
 						value={categoryChoice}
 						onChange={e => setCategoryChoice(e.target.value)}
 					>
-						{categories.map(category => <option value={category}>{category}</option>)}
+						{categories.map((category, index) => <option value={category} key={index}>{category}</option>)}
 					</Select>
 				</FormControl>
 
-				<FormControl variant="outlined" >
+				<FormControl variant="outlined" key={1}>
 					<InputLabel htmlFor="outlined-age-native-simple">Number of fakers</InputLabel>
 					<Select label="Number of fakers"
 						value={numFakers}
 						onChange={e => setNumFakers(e.target.value)}
 					>
-						{numFakerOptions.map(option => <option value={option}>{option}</option>)}
+						{numFakerOptions.map((option, index) => <option value={option} key={index}>{option}</option>)}
 					</Select>
 				</FormControl>
 			</div >
@@ -244,17 +240,6 @@ function OtherOptions({ gameState, setGameState }) {
 
 
 function Setup({ gameState, setGameState }) {
-	const startingGameState = {
-		players: [
-			{ name: 'Patrick', color: '#D62828' },
-			{ name: 'Miranda', color: '#F77F00' },
-			{ name: 'Michael', color: '#A1CDA8' },
-			{ name: 'Tamera', color: '#FCBF49' }
-		],
-		fakerIndices: [3],
-		category: 'Cowboy gear',
-		word: 'Saddle'
-	}
 
 	const [newGameState, setNewGameState] = React.useState(gameState)
 
@@ -272,7 +257,7 @@ function Setup({ gameState, setGameState }) {
 			newGameState.players.splice(index, 1)
 		}
 		// If index is Infinity, add a new player
-		else if (index == Infinity) {
+		else if (index === Infinity) {
 			newGameState.players.push(newPlayer)
 		}
 		// Otherwise replace the player at the given index
@@ -288,7 +273,7 @@ function Setup({ gameState, setGameState }) {
 		<Container maxWidth="md" >
 
 			<Typography variant="h5" gutterBottom>
-				Game setup
+				Setup
 			</Typography>
 
 			{newGameState.players.map((player, index) =>
