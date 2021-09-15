@@ -10,10 +10,10 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
+import CheckCircleIconRounded from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles({
 	card: {
-		width: 300,
 		margin: 10,
 		padding: 5
 	},
@@ -22,11 +22,14 @@ const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		'& > *': {
 			margin: 1,
+			marginRight: 5,
 			width: 30,
 			height: 30,
-			border: '3px solid white'
 		}
 	},
+	icon: {
+		float: 'right'
+	}
 
 });
 
@@ -42,7 +45,8 @@ function ColorPicker({ setPlayerColor }) {
 				<Paper
 					className={classes.colorBlock}
 					style={{ 'backgroundColor': color }}
-					onClick={() => setPlayerColor(color)} />
+					onClick={() => setPlayerColor(color)}
+					key={index} />
 			)}
 		</div>
 	);
@@ -65,14 +69,16 @@ function PlayerCard({ player, setPlayer }) {
 		<Card className={classes.card} style={{ 'backgroundColor': playerColor }}>
 			<CardContent>
 				<TextField defaultValue={player.name} label="Name" />
-				<IconButton onClick={handleExpandClick}> <ExpandMoreIcon /> </IconButton>
-				<IconButton onClick={() => setPlayer(null)}><Delete /></IconButton>
+				<IconButton onClick={handleExpandClick} className={classes.icon}> <ExpandMoreIcon /> </IconButton>
+				<IconButton onClick={() => setPlayer(null)} className={classes.icon}><Delete /></IconButton>
 			</CardContent>
 
 
 
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<ColorPicker setPlayerColor={setPlayerColor} />
+				<CardContent>
+					<ColorPicker setPlayerColor={setPlayerColor} />
+				</CardContent>
 			</Collapse>
 		</Card >
 	);
@@ -99,10 +105,15 @@ function NewPlayerCard({ setPlayer }) {
 			<CardContent>
 				<form onSubmit={handleSubmit} >
 					<TextField label="New player name" value={playerName} onInput={e => setPlayerName(e.target.value)} />
+					<IconButton onClick={handleSubmit} className={classes.icon}>
+						<CheckCircleIconRounded fontSize="large" />
+					</IconButton>
 				</form>
 
 			</CardContent>
-			<ColorPicker setPlayerColor={setPlayerColor} />
+			<CardContent>
+				<ColorPicker setPlayerColor={setPlayerColor} />
+			</CardContent>
 		</Card >
 	);
 
@@ -121,14 +132,14 @@ function Setup({ gameState, setGameState }) {
 		word: 'Saddle'
 	}
 
-	const [newGameState, setNewGameState] = React.useState(startingGameState)
+	const [newGameState, setNewGameState] = React.useState(gameState)
 
 	function setGameStateWithReRender(newGameState) {
 		let newGameStateCopy = { ...newGameState }
 
 		setNewGameState(newGameStateCopy) // This is essentially just to trigger the re-render of the this component
 		setGameState(newGameStateCopy) // This actually sets the game state for the App component
-
+		console.log(newGameStateCopy.players)
 	}
 
 	function setPlayer(newPlayer, index) {
@@ -153,10 +164,14 @@ function Setup({ gameState, setGameState }) {
 
 
 	return (
-		<Container>
-			{newGameState.players.map((player, index) =>
-				<PlayerCard key={index} player={player} setPlayer={(newPlayer) => setPlayer(newPlayer, index)} />
-			)}
+		<Container maxWidth="sm">
+			{newGameState.players.map((player, index) => {
+				console.log(player.name);
+				return < PlayerCard
+					key={index + player.name + player.color} // Make it as unique as possible so delete isn't buggy
+					player={player}
+					setPlayer={(newPlayer) => setPlayer(newPlayer, index)} />
+			})}
 
 			<NewPlayerCard setPlayer={(newPlayer) => setPlayer(newPlayer, Infinity)} />
 		</Container>

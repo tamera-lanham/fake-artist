@@ -50,13 +50,11 @@ export default function App() {
 
 
 
-function Play(props) {
+function Play({ gameState }) {
 	return (
 		<div>
 			<h2>Here is the game state:</h2>
-			{props.gameState.players.map(player => player.name)} <br />
-			{props.gameState.category} <br />
-			{props.gameState.word}
+			<pre>{JSON.stringify(gameState, null, 4)}</pre>
 		</div>
 	);
 }
