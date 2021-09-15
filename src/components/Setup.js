@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
 import CheckCircleIconRounded from '@material-ui/icons/CheckCircle';
@@ -61,16 +62,28 @@ function PlayerCard({ player, setPlayer }) {
 		setPlayer({ ...player, color: color }) // Actually change the data in the app
 	}
 
+	const [playerName, setPlayerName] = React.useState(player.name)
+
 	const [expanded, setExpanded] = React.useState(false) // Not expanded by default
 	const handleExpandClick = () => { setExpanded(!expanded) }
 
+	function handleSubmit(event) {
+		event.preventDefault()
+		setPlayer({ name: playerName, color: playerColor })
+	}
 
 	return (
 		<Card className={classes.card} style={{ 'backgroundColor': playerColor }}>
 			<CardContent>
-				<TextField defaultValue={player.name} label="Name" />
-				<IconButton onClick={handleExpandClick} className={classes.icon}> <ExpandMoreIcon /> </IconButton>
-				<IconButton onClick={() => setPlayer(null)} className={classes.icon}><Delete /></IconButton>
+				<form onSubmit={handleSubmit}>
+					<TextField
+						defaultValue={player.name}
+						label="Name"
+						onInput={e => setPlayerName(e.target.value)}
+						onBlur={handleSubmit} />
+					<IconButton onClick={handleExpandClick} className={classes.icon}> <ExpandMoreIcon /> </IconButton>
+					<IconButton onClick={() => setPlayer(null)} className={classes.icon}><Delete /></IconButton>
+				</form>
 			</CardContent>
 
 
@@ -87,7 +100,7 @@ function PlayerCard({ player, setPlayer }) {
 function NewPlayerCard({ setPlayer }) {
 	const classes = useStyles();
 
-	const defaultPlayer = { name: '', color: '#c0c0c0' }
+	const defaultPlayer = { name: '', color: '#e0e0e0' }
 
 	const [playerName, setPlayerName] = React.useState(defaultPlayer.name)
 	const [playerColor, setPlayerColor] = React.useState(defaultPlayer.color)
@@ -165,15 +178,20 @@ function Setup({ gameState, setGameState }) {
 
 	return (
 		<Container maxWidth="sm">
-			{newGameState.players.map((player, index) => {
-				console.log(player.name);
-				return < PlayerCard
+
+			<Typography variant="h5" gutterBottom>
+				Game setup
+			</Typography>
+
+			{newGameState.players.map((player, index) =>
+				< PlayerCard
 					key={index + player.name + player.color} // Make it as unique as possible so delete isn't buggy
 					player={player}
 					setPlayer={(newPlayer) => setPlayer(newPlayer, index)} />
-			})}
+			)}
 
 			<NewPlayerCard setPlayer={(newPlayer) => setPlayer(newPlayer, Infinity)} />
+
 		</Container>
 	)
 }
