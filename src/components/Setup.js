@@ -207,8 +207,8 @@ function OtherOptions({ gameState, setGameState }) {
 		<div>
 			<div className={classes.gridContainer}>
 				<FormControl variant="outlined" key={0}>
-					<InputLabel htmlFor="outlined-age-native-simple">Category</InputLabel>
-					<Select label="Category"
+					<InputLabel htmlFor="category-select">Category</InputLabel>
+					<Select native label="Category" inputProps={{ id: 'category-select' }}
 						value={categoryChoice}
 						onChange={e => setCategoryChoice(e.target.value)}
 					>
@@ -217,8 +217,8 @@ function OtherOptions({ gameState, setGameState }) {
 				</FormControl>
 
 				<FormControl variant="outlined" key={1}>
-					<InputLabel htmlFor="outlined-age-native-simple">Number of fakers</InputLabel>
-					<Select label="Number of fakers"
+					<InputLabel htmlFor="numfakers-select">Number of fakers</InputLabel>
+					<Select native label="Number of fakers" inputProps={{ id: 'numfakers-select' }}
 						value={numFakers}
 						onChange={e => setNumFakers(e.target.value)}
 					>
