@@ -46,12 +46,9 @@ const useStyles = makeStyles({
 			margin: 10
 		}
 	},
-	link: {
-		display: 'flex',
-		flexGrow: 1,
+	button: {
 		width: '100%',
-		flexWrap: 'wrap',
-		backgroundColor: '#2eadff'
+		height: '100%',
 	}
 });
 function NewPlayerCard({ setPlayer }) {
@@ -229,8 +226,9 @@ function OtherOptions({ gameState, setGameState }) {
 					{numFakerOptions.map(option => <option value={option}>{option}</option>)}
 				</Select>
 			</FormControl>
+
 			<Link to="/play">
-				<Button variant="contained" color="primary" onClick={updateGameState}>Start game</Button>
+				<Button variant="contained" color="primary" onClick={updateGameState} className={classes.button}>Start game</Button>
 			</Link>
 		</div >
 	)
