@@ -226,7 +226,7 @@ function OtherOptions({ gameState, setGameState }) {
 					</Select>
 				</FormControl>
 			</div >
-			<Link to="/play" className={classes.link}>
+			<Link to="/play/1" className={classes.link}>
 				<Button variant="contained" color="primary" onClick={updateGameState} className={classes.button}>Start game</Button>
 			</Link>
 		</div>

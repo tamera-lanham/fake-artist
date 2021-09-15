@@ -3,12 +3,10 @@ import {
 	HashRouter as Router,
 	Switch,
 	Route,
-	Link,
 	Redirect
 } from "react-router-dom";
-import Container from '@material-ui/core/Container';
-
 import Setup from './components/Setup'
+import Play from './components/Play'
 
 export default function App() {
 
@@ -39,14 +37,3 @@ export default function App() {
 
 
 
-function Play({ gameState }) {
-	return (
-		<Container maxWidth="md">
-			<h2>This is the game state:</h2>
-			<pre>{JSON.stringify(gameState, null, 4)}</pre>
-
-			<br />
-			<Link to="/setup">Return to setup</Link>
-		</Container>
-	);
-}
