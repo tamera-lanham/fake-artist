@@ -54,7 +54,7 @@ const useStyles = makeStyles({
 function NewPlayerCard({ setPlayer }) {
 	const classes = useStyles();
 
-	const defaultPlayer = { name: '', color: '#e0e0e0' }
+	const defaultPlayer = { name: '', color: '#eee' }
 
 	const [playerName, setPlayerName] = React.useState(defaultPlayer.name)
 	const [playerColor, setPlayerColor] = React.useState(defaultPlayer.color)
@@ -193,7 +193,7 @@ function OtherOptions({ gameState, setGameState }) {
 
 	const categories = ['Random', ...gameWords.categories]
 
-	const numFakerOptions = [...Array(3).keys()].map(i => i + 1)
+	const numFakerOptions = [...Array(Math.max(1, gameState.players.length)).keys()].map(i => i + 1)
 	numFakerOptions.push('Random')
 
 	const [categoryChoice, setCategoryChoice] = React.useState('Random')
@@ -279,7 +279,7 @@ function Setup({ gameState, setGameState }) {
 
 
 	return (
-		<Container maxWidth="md" style={{ 'backgroundColor': '#fafafa' }}>
+		<Container maxWidth="md" >
 
 			<Typography variant="h5" gutterBottom>
 				Game setup
