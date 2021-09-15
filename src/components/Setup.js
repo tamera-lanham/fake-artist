@@ -31,8 +31,7 @@ const useStyles = makeStyles({
 		'& > *': {
 			margin: 1,
 			marginRight: 5,
-			width: 30,
-			height: 30,
+			height: 30
 		}
 	},
 	icon: {
@@ -40,11 +39,14 @@ const useStyles = makeStyles({
 	},
 	gridContainer: {
 		display: 'flex',
-
 		'& > *': {
 			flexGrow: 1,
 			margin: 10
 		}
+	},
+	link: {
+		padding: 8,
+		display: 'flex'
 	},
 	button: {
 		width: '100%',
@@ -139,8 +141,7 @@ function PlayerCard({ player, setPlayer }) {
 function ColorPicker({ onColorChoice }) {
 	const classes = useStyles();
 
-	const colors = ['#404040', '#003049', '#D62828', '#F77F00', '#FCBF49', '#A1CDA8']
-
+	const colors = ["#AC6D5E", "#F79C8F", "#ED5842", "#F7AA64", "#FFD28A", "#BDC586", "#687C6F", "#56AFAC", "#365A79", "#74688E", "#B0B0B0"]
 
 	return (
 		<div className={classes.colorPicker}>
@@ -210,31 +211,32 @@ function OtherOptions({ gameState, setGameState }) {
 	}
 
 	return (
-		<div className={classes.gridContainer}>
-			<FormControl variant="outlined">
-				<InputLabel htmlFor="outlined-age-native-simple">Category</InputLabel>
-				<Select label="Category"
-					value={categoryChoice}
-					onChange={e => setCategoryChoice(e.target.value)}
-				>
-					{categories.map(category => <option value={category}>{category}</option>)}
-				</Select>
-			</FormControl>
+		<div>
+			<div className={classes.gridContainer}>
+				<FormControl variant="outlined">
+					<InputLabel htmlFor="outlined-age-native-simple">Category</InputLabel>
+					<Select label="Category"
+						value={categoryChoice}
+						onChange={e => setCategoryChoice(e.target.value)}
+					>
+						{categories.map(category => <option value={category}>{category}</option>)}
+					</Select>
+				</FormControl>
 
-			<FormControl variant="outlined" >
-				<InputLabel htmlFor="outlined-age-native-simple">Number of fakers</InputLabel>
-				<Select label="Number of fakers"
-					value={numFakers}
-					onChange={e => setNumFakers(e.target.value)}
-				>
-					{numFakerOptions.map(option => <option value={option}>{option}</option>)}
-				</Select>
-			</FormControl>
-
-			<Link to="/play">
+				<FormControl variant="outlined" >
+					<InputLabel htmlFor="outlined-age-native-simple">Number of fakers</InputLabel>
+					<Select label="Number of fakers"
+						value={numFakers}
+						onChange={e => setNumFakers(e.target.value)}
+					>
+						{numFakerOptions.map(option => <option value={option}>{option}</option>)}
+					</Select>
+				</FormControl>
+			</div >
+			<Link to="/play" className={classes.link}>
 				<Button variant="contained" color="primary" onClick={updateGameState} className={classes.button}>Start game</Button>
 			</Link>
-		</div >
+		</div>
 	)
 
 }
