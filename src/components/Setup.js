@@ -154,10 +154,7 @@ function ColorPicker({ onColorChoice }) {
 
 
 function OtherOptions({ gameState, setGameState }) {
-	/* Needs to have:
-	- Category
-	- Number of fakers
-	*/
+
 	const classes = useStyles();
 
 	function randomChoice(array) { return array[Math.floor(Math.random() * array.length)]; }
@@ -179,7 +176,7 @@ function OtherOptions({ gameState, setGameState }) {
 		const numPlayers = gameState.players.length
 
 		if (numFakers === 'Random') {
-			numFakers = Math.floor(Math.random() * numPlayers)
+			numFakers = Math.floor(Math.random() * (numPlayers - 1)) + 1
 		}
 		numFakers = Math.min(numFakers, numPlayers)
 
@@ -192,13 +189,13 @@ function OtherOptions({ gameState, setGameState }) {
 
 	}
 
+	const [categoryChoice, setCategoryChoice] = React.useState('Random')
+	const [numFakers, setNumFakers] = React.useState(1)
+
 	const categories = ['Random', ...gameWords.categories]
 
 	const numFakerOptions = [...Array(Math.max(1, gameState.players.length)).keys()].map(i => i + 1)
 	numFakerOptions.push('Random')
-
-	const [categoryChoice, setCategoryChoice] = React.useState('Random')
-	const [numFakers, setNumFakers] = React.useState(1)
 
 	function updateGameState() {
 		const [category, word] = getCategoryAndWord(categoryChoice)
