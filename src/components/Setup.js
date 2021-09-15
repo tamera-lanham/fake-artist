@@ -67,20 +67,24 @@ function NewPlayerCard({ setPlayer }) {
 
 	}
 
+	function handleSubmitColorPicker(color) {
+		setPlayer({ name: playerName, color: color })
+		setPlayerName(defaultPlayer.name)
+		setPlayerColor(defaultPlayer.color)
+	}
+
 	return (
 		<Card className={classes.card} style={{ 'backgroundColor': playerColor }}>
-			<CardContent>
-				<form onSubmit={handleSubmit} >
+			<form onSubmit={handleSubmit} >
+				<CardContent>
 					<TextField label="New player name" value={playerName} onInput={e => setPlayerName(e.target.value)} />
-					<IconButton onClick={handleSubmit} className={classes.icon}>
-						<CheckCircleIconRounded fontSize="large" />
-					</IconButton>
-				</form>
+				</CardContent>
+				<CardContent>
+					<ColorPicker onColorChoice={handleSubmitColorPicker} />
+				</CardContent>
+			</form>
 
-			</CardContent>
-			<CardContent>
-				<ColorPicker setPlayerColor={setPlayerColor} onClick={handleSubmit} />
-			</CardContent>
+
 		</Card >
 	);
 
@@ -125,14 +129,14 @@ function PlayerCard({ player, setPlayer }) {
 
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<CardContent>
-					<ColorPicker setPlayerColor={setPlayerColor} />
+					<ColorPicker onColorChoice={setPlayerColor} />
 				</CardContent>
 			</Collapse>
 		</Card >
 	);
 }
 
-function ColorPicker({ setPlayerColor }) {
+function ColorPicker({ onColorChoice }) {
 	const classes = useStyles();
 
 	const colors = ['#404040', '#003049', '#D62828', '#F77F00', '#FCBF49', '#A1CDA8']
@@ -141,10 +145,10 @@ function ColorPicker({ setPlayerColor }) {
 	return (
 		<div className={classes.colorPicker}>
 			{colors.map((color, index) =>
-				<Paper
+				<Button
 					className={classes.colorBlock}
 					style={{ 'backgroundColor': color }}
-					onClick={() => setPlayerColor(color)}
+					onClick={() => onColorChoice(color)}
 					key={index} />
 			)}
 		</div>
