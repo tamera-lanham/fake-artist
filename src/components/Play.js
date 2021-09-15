@@ -76,7 +76,14 @@ function PlayerPage({ gameState }) {
 function WordReveal({ gameState, otherProps }) {
 	const [mouseDown, setMouseDown] = React.useState(false)
 	return (
-		<div onMouseDown={() => setMouseDown(true)} onMouseUp={() => setMouseDown(false)}>
+		<div
+			onMouseDown={() => setMouseDown(true)}
+			onMouseUp={() => setMouseDown(false)}
+			onMouseOut={() => setMouseDown(false)}
+			onTouchStart={() => setMouseDown(true)}
+			onTouchEnd={() => setMouseDown(false)}
+			onTouchCancel={() => setMouseDown(false)}
+		>
 			<WordRevealInner gameState={gameState} otherProps={otherProps} mouseDown={mouseDown} />
 		</div>
 	)
