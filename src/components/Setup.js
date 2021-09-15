@@ -6,12 +6,19 @@ import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import ExpandMoreIcon from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
 import CheckCircleIconRounded from '@material-ui/icons/CheckCircle';
+import gameWords from '../data/words.json'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
 	card: {
@@ -30,27 +37,56 @@ const useStyles = makeStyles({
 	},
 	icon: {
 		float: 'right'
+	},
+	gridContainer: {
+		display: 'flex',
+
+		'& > *': {
+			flexGrow: 1,
+			margin: 10
+		}
+	},
+	link: {
+		display: 'flex',
+		flexGrow: 1,
+		width: '100%',
+		flexWrap: 'wrap',
+		backgroundColor: '#2eadff'
 	}
-
 });
-
-function ColorPicker({ setPlayerColor }) {
+function NewPlayerCard({ setPlayer }) {
 	const classes = useStyles();
 
-	const colors = ['#404040', '#003049', '#D62828', '#F77F00', '#FCBF49', '#A1CDA8']
+	const defaultPlayer = { name: '', color: '#e0e0e0' }
 
+	const [playerName, setPlayerName] = React.useState(defaultPlayer.name)
+	const [playerColor, setPlayerColor] = React.useState(defaultPlayer.color)
+
+	function handleSubmit(event) {
+		event.preventDefault()
+		setPlayer({ name: playerName, color: playerColor })
+		setPlayerName(defaultPlayer.name)
+		setPlayerColor(defaultPlayer.color)
+
+	}
 
 	return (
-		<div className={classes.colorPicker}>
-			{colors.map((color, index) =>
-				<Paper
-					className={classes.colorBlock}
-					style={{ 'backgroundColor': color }}
-					onClick={() => setPlayerColor(color)}
-					key={index} />
-			)}
-		</div>
+		<Card className={classes.card} style={{ 'backgroundColor': playerColor }}>
+			<CardContent>
+				<form onSubmit={handleSubmit} >
+					<TextField label="New player name" value={playerName} onInput={e => setPlayerName(e.target.value)} />
+					<IconButton onClick={handleSubmit} className={classes.icon}>
+						<CheckCircleIconRounded fontSize="large" />
+					</IconButton>
+				</form>
+
+			</CardContent>
+			<CardContent>
+				<ColorPicker setPlayerColor={setPlayerColor} onClick={handleSubmit} />
+			</CardContent>
+		</Card >
 	);
+
 }
 
 function PlayerCard({ player, setPlayer }) {
@@ -81,8 +117,10 @@ function PlayerCard({ player, setPlayer }) {
 						label="Name"
 						onInput={e => setPlayerName(e.target.value)}
 						onBlur={handleSubmit} />
-					<IconButton onClick={handleExpandClick} className={classes.icon}> <ExpandMoreIcon /> </IconButton>
+
 					<IconButton onClick={() => setPlayer(null)} className={classes.icon}><Delete /></IconButton>
+					<IconButton onClick={handleExpandClick} className={classes.icon}><ExpandMoreIcon /></IconButton>
+
 				</form>
 			</CardContent>
 
@@ -97,40 +135,109 @@ function PlayerCard({ player, setPlayer }) {
 	);
 }
 
-function NewPlayerCard({ setPlayer }) {
+function ColorPicker({ setPlayerColor }) {
 	const classes = useStyles();
 
-	const defaultPlayer = { name: '', color: '#e0e0e0' }
+	const colors = ['#404040', '#003049', '#D62828', '#F77F00', '#FCBF49', '#A1CDA8']
 
-	const [playerName, setPlayerName] = React.useState(defaultPlayer.name)
-	const [playerColor, setPlayerColor] = React.useState(defaultPlayer.color)
 
-	function handleSubmit(event) {
-		event.preventDefault()
-		setPlayer({ name: playerName, color: playerColor })
-		setPlayerName(defaultPlayer.name)
-		setPlayerColor(defaultPlayer.color)
+	return (
+		<div className={classes.colorPicker}>
+			{colors.map((color, index) =>
+				<Paper
+					className={classes.colorBlock}
+					style={{ 'backgroundColor': color }}
+					onClick={() => setPlayerColor(color)}
+					key={index} />
+			)}
+		</div>
+	);
+}
+
+
+function OtherOptions({ gameState, setGameState }) {
+	/* Needs to have:
+	- Category
+	- Number of fakers
+	*/
+	const classes = useStyles();
+
+	function randomChoice(array) { return array[Math.floor(Math.random() * array.length)]; }
+
+	function getCategoryAndWord(categoryChoice) {
+		let category, word, _
+		if (categoryChoice == 'Random') {
+			[category, word] = randomChoice(gameWords.list)
+		}
+		else {
+			category = categoryChoice;
+			[_, word] = randomChoice(gameWords.list.filter(([category, word]) => category == categoryChoice))
+		}
+		return [category, word]
+	}
+
+	function getFakerIndices(numFakers) {
+		const fakerIndices = []
+		const numPlayers = gameState.players.length
+
+		if (numFakers == 'Random') {
+			numFakers = Math.floor(Math.random() * numPlayers)
+		}
+		numFakers = Math.min(numFakers, numPlayers)
+
+		while (fakerIndices.length < numFakers) {
+			let index = Math.floor(Math.random() * numPlayers)
+			if (!fakerIndices.includes(index)) { fakerIndices.push(index) }
+		}
+
+		return fakerIndices
 
 	}
 
-	return (
-		<Card className={classes.card} style={{ 'backgroundColor': playerColor }}>
-			<CardContent>
-				<form onSubmit={handleSubmit} >
-					<TextField label="New player name" value={playerName} onInput={e => setPlayerName(e.target.value)} />
-					<IconButton onClick={handleSubmit} className={classes.icon}>
-						<CheckCircleIconRounded fontSize="large" />
-					</IconButton>
-				</form>
+	const categories = ['Random', ...gameWords.categories]
 
-			</CardContent>
-			<CardContent>
-				<ColorPicker setPlayerColor={setPlayerColor} />
-			</CardContent>
-		</Card >
-	);
+	const numFakerOptions = [...Array(3).keys()].map(i => i + 1)
+	numFakerOptions.push('Random')
+
+	const [categoryChoice, setCategoryChoice] = React.useState('Random')
+	const [numFakers, setNumFakers] = React.useState(1)
+
+	function updateGameState() {
+		const [category, word] = getCategoryAndWord(categoryChoice)
+		const fakerIndices = getFakerIndices(numFakers)
+		setGameState({ ...gameState, category, word, fakerIndices })
+	}
+
+	return (
+		<div className={classes.gridContainer}>
+			<FormControl variant="outlined">
+				<InputLabel htmlFor="outlined-age-native-simple">Category</InputLabel>
+				<Select label="Category"
+					value={categoryChoice}
+					onChange={e => setCategoryChoice(e.target.value)}
+				>
+					{categories.map(category => <option value={category}>{category}</option>)}
+				</Select>
+			</FormControl>
+
+			<FormControl variant="outlined" >
+				<InputLabel htmlFor="outlined-age-native-simple">Number of fakers</InputLabel>
+				<Select label="Number of fakers"
+					value={numFakers}
+					onChange={e => setNumFakers(e.target.value)}
+				>
+					{numFakerOptions.map(option => <option value={option}>{option}</option>)}
+				</Select>
+			</FormControl>
+			<Link to="/play">
+				<Button variant="contained" color="primary" onClick={updateGameState}>Start game</Button>
+			</Link>
+		</div >
+	)
 
 }
+
+
 
 function Setup({ gameState, setGameState }) {
 	const startingGameState = {
@@ -152,7 +259,6 @@ function Setup({ gameState, setGameState }) {
 
 		setNewGameState(newGameStateCopy) // This is essentially just to trigger the re-render of the this component
 		setGameState(newGameStateCopy) // This actually sets the game state for the App component
-		console.log(newGameStateCopy.players)
 	}
 
 	function setPlayer(newPlayer, index) {
@@ -169,15 +275,13 @@ function Setup({ gameState, setGameState }) {
 		else {
 			newGameState.players[index] = newPlayer
 		}
-		console.log(newGameState.players)
 
 		setGameStateWithReRender(newGameState)
 	}
 
 
-
 	return (
-		<Container maxWidth="sm">
+		<Container maxWidth="md" style={{ 'backgroundColor': '#fafafa' }}>
 
 			<Typography variant="h5" gutterBottom>
 				Game setup
@@ -191,6 +295,8 @@ function Setup({ gameState, setGameState }) {
 			)}
 
 			<NewPlayerCard setPlayer={(newPlayer) => setPlayer(newPlayer, Infinity)} />
+
+			<OtherOptions gameState={newGameState} setGameState={setGameStateWithReRender} />
 
 		</Container>
 	)
