@@ -8,6 +8,8 @@ import {
 import Setup from './components/Setup'
 import Play from './components/Play'
 import Reveal from './components/Reveal'
+import ScrollToTop from './components/ScrollToTop'
+
 
 export default function App() {
 
@@ -21,6 +23,7 @@ export default function App() {
 
 	return (
 		<Router>
+			<ScrollToTop />
 			<Switch>
 				<Route exact path="/">
 					<Redirect to="/setup" />

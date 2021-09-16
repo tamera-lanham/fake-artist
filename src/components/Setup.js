@@ -42,7 +42,8 @@ const useStyles = makeStyles({
 	},
 	link: {
 		padding: 8,
-		display: 'flex'
+		display: 'flex',
+		textDecoration: 'none'
 	},
 	button: {
 		width: '100%',

@@ -26,12 +26,19 @@ const useStyles = makeStyles({
 	wordRevealCard: {
 		padding: 10,
 		marginTop: 10,
+		height: 200,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 		border: '1px solid rgba(255, 255, 255, .4)',
 		backgroundColor: "rgba(255, 255, 255, .4)"
 	},
 	nextButton: {
 		width: '100%',
-	}
+	},
+	link: {
+		textDecoration: 'none',
+	},
 })
 
 
@@ -40,7 +47,7 @@ function PlayerPage({ gameState }) {
 
 	function renderPlayerName(enteredName) {
 		if (!enteredName.trim()) {
-			return "player " + (index + 1)
+			return "Player " + (index + 1)
 		}
 		return enteredName
 	}
@@ -102,7 +109,7 @@ function WordRevealInner({ gameState, otherProps, mouseDown }) {
 			<Card variant="outlined" className={classes.wordRevealCard}>
 				<CardContent>
 					<Typography variant="h6" align='center'>
-						Hold to see the word (for {playerName}'s eyes only!)
+						{playerName} only: Press to see the word
 					</Typography>
 				</CardContent>
 			</Card>
@@ -136,7 +143,7 @@ function PlayerPagePassButton({ gameState, playerNum }) {
 	const classes = useStyles()
 	if (playerNum < numPlayers) {
 		return (
-			<Link to={`./${playerNum + 1}`}>
+			<Link to={`./${playerNum + 1}`} className={classes.link}>
 				<Button variant="contained" className={classes.nextButton}>
 					Next player
 				</Button>
@@ -145,7 +152,7 @@ function PlayerPagePassButton({ gameState, playerNum }) {
 	}
 	else {
 		return (
-			<Link to='/reveal'>
+			<Link to='/reveal' className={classes.link}>
 				<Button variant="contained" color="primary" className={classes.nextButton}>
 					Done
 				</Button>
