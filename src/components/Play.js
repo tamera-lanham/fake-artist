@@ -37,6 +37,7 @@ const useStyles = makeStyles({
 
 function PlayerPage({ gameState }) {
 
+
 	function renderPlayerName(enteredName) {
 		if (!enteredName.trim()) {
 			return "player " + (index + 1)
@@ -168,22 +169,28 @@ function DisplayGameState({ gameState }) {
 }
 
 function Play({ gameState }) {
+
 	let { path, url } = useRouteMatch();
 	const { pathname } = useLocation();
-	return (
-		<div>
-			<Switch>
-				<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} /> {/* This is kind of a kludge */}
-				<Route exact path={path}>
-					<DisplayGameState gameState={gameState} />
-				</Route>
 
-				<Route path={`${path}/:playerNum`}>
-					<PlayerPage gameState={gameState} />
-				</Route>
-			</Switch>
-		</div>
+	if (gameState.players.length == 0) {
+		return (<Redirect to="/setup" />)
+	}
+
+	return (
+		<Switch>
+			<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} /> {/* This is kind of a kludge */}
+			<Route exact path={path}>
+				<DisplayGameState gameState={gameState} />
+			</Route>
+
+			<Route path={`${path}/:playerNum`}>
+				<PlayerPage gameState={gameState} />
+			</Route>
+		</Switch>
+
 	);
 }
+
 
 export default Play
