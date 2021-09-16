@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Setup from './components/Setup'
 import Play from './components/Play'
+import Reveal from './components/Reveal'
 
 export default function App() {
 
@@ -29,6 +30,9 @@ export default function App() {
 				</Route>
 				<Route path="/play">
 					<Play gameState={gameState} />
+				</Route>
+				<Route path="/reveal">
+					<Reveal gameState={gameState} />
 				</Route>
 			</Switch>
 		</Router>

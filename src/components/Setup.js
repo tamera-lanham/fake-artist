@@ -137,7 +137,7 @@ function PlayerCard({ player, setPlayer }) {
 function ColorPicker({ onColorChoice }) {
 	const classes = useStyles();
 
-	const colors = ["#AC6D5E", "#F79C8F", "#ED5842", "#F7AA64", "#FFD28A", "#BDC586", "#687C6F", "#56AFAC", "#365A79", "#74688E", "#B0B0B0"]
+	const colors = ["#AC6D5E", "#ED5842", "#F79C8F", "#F7AA64", "#FFD28A", "#BDC586", "#687C6F", "#56AFAC", "#365A79", "#74688E", "#B0B0B0"]
 
 	return (
 		<div className={classes.colorPicker}>

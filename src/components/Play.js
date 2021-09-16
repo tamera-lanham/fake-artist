@@ -6,8 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { textAlign } from '@material-ui/system';
-import { classes } from "istanbul-lib-coverage";
+import Stack from '@mui/material/Stack'
 
 const useStyles = makeStyles({
 	gridContainer: {
@@ -27,6 +26,7 @@ const useStyles = makeStyles({
 	wordRevealCard: {
 		padding: 10,
 		marginTop: 10,
+		border: '1px solid rgba(255, 255, 255, .4)',
 		backgroundColor: "rgba(255, 255, 255, .4)"
 	},
 	nextButton: {
@@ -52,23 +52,23 @@ function PlayerPage({ gameState }) {
 
 	const classes = useStyles()
 	return (
-		<Container maxWidth="md">
-			<div style={{ backgroundColor: player.color, height: '100vh', padding: 20 }}>
-				<Typography variant="h2" gutterBottom={true} style={{ marginBottom: 50 }}>
-					Pass the phone to {playerName} 📲
+		<Container maxWidth="md" style={{ backgroundColor: player.color }}>
+			<div style={{ height: '100vh', padding: 20 }}>
+				<Typography align="center" variant="h5" >
+					Pass the phone to
 				</Typography>
-				<Typography variant="h5" gutterBottom={true}>
-					Did you get it, {playerName}? Good.
+				<Typography align="center" variant="h2" gutterBottom={true} style={{ marginBottom: 50 }}>
+					{playerName}
 				</Typography>
-				<div className={classes.gridContainer}>
-					<Card className={classes.categoryCard}>
-						<CardContent>Category: <b>{gameState.category}</b></CardContent>
-					</Card>
+				<Stack spacing={2}>
+					<Typography variant="h6" align='center'>Category: <b>{gameState.category}</b></Typography>
 					<WordReveal gameState={gameState} otherProps={{ index, playerName }} />
-				</div>
-				<PlayerPagePassButton gameState={gameState} playerNum={playerNum} />
+					<PlayerPagePassButton gameState={gameState} playerNum={playerNum} />
+				</Stack>
 			</div>
-		</Container>
+		</Container >
+
+
 	)
 
 }
@@ -98,25 +98,31 @@ function WordRevealInner({ gameState, otherProps, mouseDown }) {
 
 	if (!mouseDown) {
 		return (
-			<Card className={classes.wordRevealCard}>
+			<Card variant="outlined" className={classes.wordRevealCard}>
 				<CardContent>
-					Hold to see the word
+					<Typography variant="h6" align='center'>
+						Hold to see the word (for {playerName}'s eyes only!)
+					</Typography>
 				</CardContent>
 			</Card>
 		)
 	} else if (playerIsFaker) {
 		return (
-			<Card className={classes.wordRevealCard}>
+			<Card variant="outlined" className={classes.wordRevealCard}>
 				<CardContent>
-					<b>You're a faker!</b>
+					<Typography variant="h6" align='center'>
+						<b>You're a faker!</b>
+					</Typography>
 				</CardContent>
 			</Card>
 		)
 	} else {
 		return (
-			<Card className={classes.wordRevealCard}>
+			<Card variant="outlined" className={classes.wordRevealCard}>
 				<CardContent>
-					The word is <b>{gameState.word}</b>
+					<Typography variant="h6" align='center'>
+						The word is <b>{gameState.word}</b>
+					</Typography>
 				</CardContent>
 			</Card>
 		)
@@ -138,11 +144,11 @@ function PlayerPagePassButton({ gameState, playerNum }) {
 	}
 	else {
 		return (
-			<Link to={`.`}>
+			<Link to='/reveal'>
 				<Button variant="contained" color="primary" className={classes.nextButton}>
 					Done
 				</Button>
-			</Link>
+			</Link >
 		)
 	}
 }
@@ -162,23 +168,6 @@ function DisplayGameState({ gameState }) {
 }
 
 function Play({ gameState }) {
-
-	/*
-	
-	For each player, 1 page saying:
-	- Pass the phone to $player!
-	- For $player's eyes only: click and hold to see the word
-	- Button saying "Got it", which loads the next page
-	- Unobtrusive "restart game" link somewhere?
-	
-	At the end, big reveal page?
-	
-	Edge situations:
-	- No players
-	- 1 player
-	- Players have no names
-	
-	*/
 	let { path, url } = useRouteMatch();
 	const { pathname } = useLocation();
 	return (
