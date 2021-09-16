@@ -29,28 +29,13 @@ const useStyles = makeStyles({
 	}
 })
 
-function Faker({ player, index }) {
-
-	function renderPlayerName(enteredName) {
-		if (!enteredName.trim()) {
-			return "Player " + (index + 1)
-		}
-		return enteredName
-	}
-
-	const playerName = renderPlayerName(player.name)
-
-	return (
-		<div>Name: {playerName}</div>
-	)
-}
 
 function RevealCard({ gameState, revealed }) {
 	const classes = useStyles()
 
 	function renderPlayerName(enteredName, index) {
 		if (!enteredName.trim()) {
-			return "player " + (index + 1)
+			return "Player " + (index + 1)
 		}
 		return enteredName
 	}
