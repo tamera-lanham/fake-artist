@@ -33,7 +33,7 @@ function Faker({ player, index }) {
 
 	function renderPlayerName(enteredName) {
 		if (!enteredName.trim()) {
-			return "player " + (index + 1)
+			return "Player " + (index + 1)
 		}
 		return enteredName
 	}

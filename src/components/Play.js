@@ -39,6 +39,9 @@ const useStyles = makeStyles({
 	link: {
 		textDecoration: 'none',
 	},
+	noSelect: {
+		userSelect: 'none'
+	}
 })
 
 
@@ -83,6 +86,8 @@ function PlayerPage({ gameState }) {
 
 function WordReveal({ gameState, otherProps }) {
 	const [mouseDown, setMouseDown] = React.useState(false)
+	const classes = useStyles()
+
 	return (
 		<div
 			onMouseDown={() => setMouseDown(true)}
@@ -92,13 +97,18 @@ function WordReveal({ gameState, otherProps }) {
 			onTouchEnd={() => setMouseDown(false)}
 			onTouchCancel={() => setMouseDown(false)}
 		>
-			<WordRevealInner gameState={gameState} otherProps={otherProps} mouseDown={mouseDown} />
+			<Card variant="outlined" className={classes.wordRevealCard}>
+				<CardContent>
+					<Typography variant="h6" align='center' className={classes.noSelect}>
+						<WordRevealInner gameState={gameState} otherProps={otherProps} mouseDown={mouseDown} />
+					</Typography>
+				</CardContent>
+			</Card>
 		</div>
 	)
 }
 
 function WordRevealInner({ gameState, otherProps, mouseDown }) {
-	const classes = useStyles()
 	const { index, playerName } = otherProps
 	const player = gameState.players[index]
 
@@ -106,33 +116,15 @@ function WordRevealInner({ gameState, otherProps, mouseDown }) {
 
 	if (!mouseDown) {
 		return (
-			<Card variant="outlined" className={classes.wordRevealCard}>
-				<CardContent>
-					<Typography variant="h6" align='center'>
-						{playerName} only: Press to see the word
-					</Typography>
-				</CardContent>
-			</Card>
+			<span>{playerName} only: Press to see the word</span>
 		)
 	} else if (playerIsFaker) {
 		return (
-			<Card variant="outlined" className={classes.wordRevealCard}>
-				<CardContent>
-					<Typography variant="h6" align='center'>
-						<b>You're a faker!</b>
-					</Typography>
-				</CardContent>
-			</Card>
+			<span><b>You're a faker!</b></span>
 		)
 	} else {
 		return (
-			<Card variant="outlined" className={classes.wordRevealCard}>
-				<CardContent>
-					<Typography variant="h6" align='center'>
-						The word is <b>{gameState.word}</b>
-					</Typography>
-				</CardContent>
-			</Card>
+			<span>The word is <b>{gameState.word}</b></span>
 		)
 	}
 }
